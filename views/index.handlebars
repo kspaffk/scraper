@@ -1,0 +1,33 @@
+<script src="/js/index.js"></script>
+{{#each dbArticles}}
+<div class="article-container" id={{_id}}>
+    <div class="article-card">
+        <div class="article-img">
+            <img src={{ imgLink }}>
+        </div>
+        <div class="article-line article-title">{{ title }}</div>
+        <div class="article-line article-text">{{ text }}</div>
+        <div class="article-line article-datePub">{{ formatDatePub }}</div>
+        <div class="article-line article-link">
+            <a href={{ link }} target="_blank">Link to article</a>
+        </div>
+    </div>
+    <div class="note-card" data-active="false">
+        NOTE
+        <div class="note-line prev-notes">
+            {{#each notes }}
+            <div class="dbnote">
+            <div class="note" id={{_id}}>
+                {{ text }}
+            </div>
+            <button class="btn delete-note">X</button>
+            </div>
+            {{/each}}
+        </div>
+        <div class="note-line note-text">
+            <textarea class="note-text"></textarea>
+            <button class="btn add-note">Add Note</button>
+        </div>
+    </div>
+</div>
+{{/each}}

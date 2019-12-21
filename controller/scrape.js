@@ -1,8 +1,8 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const importArticle = require("./controller");
+const controller = require("./controller");
 
-var scrapeArticles = function() {
+const scrapeArticles = function() {
     axios.get("https://tomshardware.com/news").then(function(response) {
         var $ = cheerio.load(response.data);
         var articleArray = [];
@@ -27,11 +27,12 @@ var scrapeArticles = function() {
                 .children(".content")
                 .children("header")
                 .children(".byline")
-                .children("time").attr("datetime");
+                .children("time")
+                .attr("datetime");
             articleArray.push(article);
         });
-        importArticle(articleArray);
+        controller.importArticles(articleArray);
     });
 };
 
-module.exports = scrapeArticles;
+module.exports = { scrapeArticles: scrapeArticles };

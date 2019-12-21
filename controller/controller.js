@@ -1,28 +1,56 @@
-var db = require("../models");
+const db = require("../models");
 
-var importArticle = function(articles, cb) {
-    var articlesCreatedArray = [];
+const importArticles = function(articles) {
     articles.forEach(article => {
-        console.log(article);
         db.Article.create(article, function(err, articleCreated) {
             if (err) {
                 return console.log(`Article not created.`);
             }
-            
-            articlesCreatedArray.push(articleCreated);
-            return cb(articlesCreatedArray);
+            console.log(`Article created`);
         });
     });
 };
 
-var getArticles = function(cb) {
-    db.Article.find({}, function(err, articles) {
-        if(err) {
-            return console.log(`There was an error retrieving articles`);
-        }
-
-        return cb(articles);
-    });
+const getArticles = function(cb) {
+    db.Article.find({})
+        .sort({ datePub: -1 })
+        .populate({ path: "notes" })
+        .exec(function(err, articles) {
+            if (err) {
+                return console.log(`There was an error retrieving articles`);
+            }
+            return cb(articles);
+        });
 };
 
-module.exports = importArticle;
+const createNote = function(noteJSON) {
+    db.Note.create({ text: noteJSON.noteText })
+        .then(function(noteCreated) {
+            return db.Article.findOneAndUpdate(
+                { _id: noteJSON.articleId },
+                { $push: { notes: noteCreated._id } },
+                { new: true }
+            );
+        })
+        .then(function(dbArticle) {
+            if (dbArticle === false) {
+                return console.log(`Note not created`);
+            }
+            return dbArticle;
+        });
+};
+
+const deleteNote = function(noteId) {
+    db.Note.deleteOne({ _id: noteId._id }, function(err) {
+        if (err) {
+            console.log(`Error deleting id: ${noteId._id}`);
+        }
+    });
+}
+
+module.exports = {
+    importArticles: importArticles,
+    getArticles: getArticles,
+    createNote: createNote,
+    deleteNote: deleteNote
+};
