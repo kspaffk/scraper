@@ -13,21 +13,21 @@
         </div>
     </div>
     <div class="note-card" data-active="false">
-        NOTE
+        <h3 class="note-header">NOTES</h3>
         <div class="note-line prev-notes">
             {{#each notes }}
             <div class="dbnote">
-            <div class="note" id={{_id}}>
-                {{ text }}
-            </div>
-            <button class="btn delete-note">X</button>
+                <div class="note" id={{_id}}>
+                    {{ text }}
+                </div>
+                <button class="btn delete-note">Delete</button>
             </div>
             {{/each}}
         </div>
         <div class="note-line note-text">
-            <textarea class="note-text"></textarea>
-            <button class="btn add-note">Add Note</button>
+            <textarea class="note-text" rows="5" cols="50"></textarea>
         </div>
+        <button class="btn add-note">Add Note</button>
     </div>
 </div>
 {{/each}}

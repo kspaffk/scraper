@@ -6,15 +6,18 @@ $(document).ready(() => {
     $(".add-note").on("click", function(event) {
         let articleId = $(this)
             .parents()
-            .eq(2)
+            .eq(1)
             .attr("id");
         let noteText = $(this)
             .siblings(".note-text")
+            .children("textarea")
             .val();
+        console.log(`${articleId} AND ${noteText}`);
         if (noteText !== "") {
             let noteJSON = { articleId: articleId, noteText: noteText };
             $(this)
                 .siblings(".note-text")
+                .children("textarea")
                 .val("");
             createNote(noteJSON);
         }
@@ -43,11 +46,11 @@ const createNote = function(noteJSON) {
 };
 
 const deleteNote = function(noteId) {
-    noteIdObj = {_id: noteId};
+    noteIdObj = { _id: noteId };
     $.ajax({
         url: "/api/note/",
         type: "DELETE",
-        data: noteIdObj,
+        data: noteIdObj
     }).then(function() {
         window.location.reload();
     });
